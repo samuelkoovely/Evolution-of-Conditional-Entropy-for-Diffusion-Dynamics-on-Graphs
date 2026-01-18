@@ -3549,58 +3549,8 @@ class StaticTempNetwork(object):
                                     force_csr=True,
                                     tol=None,
                                     time_domain = None):
-        """
+        """ compute entropy over time and saves them in a dict of lists `self.S[lamda]
         
-        Computes interevent transition matrices as T_k(lamda) = expm(-tau_k*lamda*L_k).
-        
-        The transition matrix T_k is saved in `self.inter_T[lamda][k]`, where 
-        self.inter_T is a dictionary with lamda as keys and lists of transition
-        matrices as values.
-        
-        will compute from self.times[self._k_start_laplacians] until 
-        self.times[self._k_stop_laplacians-1]
-        
-        the transition matrix at step k, is the probability transition matrix
-        between times[k] and times[k+1]
-        
-        Parameters
-        ----------
-        lamda : float, optional
-            Random walk rate, dynamical resolution parameter. The default (None)
-            is 1 over the median inter event time.
-        t_start : float or int, optional
-            Starting time, passed to `compute_laplacian_matrices` if the 
-            Laplacians have not yet been computed.
-            Otherwise is not used.
-            The computation starts at self.times[self._k_start_laplacians].
-            The default is None, i.e. starts at the beginning of times.
-        t_stop : float or int, optional
-            Same than `t_start` but for the ending time of computations.
-            Computations stop at self.times[self._k_stop_laplacians-1].
-            Default is end of times.
-        verbose : bool, optional
-            The default is False.
-        fix_tau_k : bool, optional
-            If true, all interevent times (tau_k) in the formula above are set to 1. 
-            This decouples the dynamic scale from the length of event which
-            is useful for temporal networks with instantaneous events.
-            The default is False.
-        use_sparse_stoch : bool, optional
-            Whether to use custom sparse stochastic matrix format to save the
-            inter transition matrices. Especially useful for large networks as 
-            the matrix exponential is then computed on each connected component 
-            separately (more memory efficient). The default is False.
-        dense_expm : bool, optional
-            Whether to use the dense version of the matrix exponential algorithm
-            at each time steps. Recommended for not too large networks. 
-            The inter trans. matrices are still saved as sparse scipy matrices
-            as they usually have many zero values. The default is True. Has no
-            effect is use_sparse_stoch is True.
-
-        Returns
-        -------
-        None.
-
         """
         
         if not hasattr(self, 'laplacians'):
